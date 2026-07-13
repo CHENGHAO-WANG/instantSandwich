@@ -3,3 +3,4 @@
 export(dof_gls_style)
 export(dof_mmrm)
 export(robust.cov)
+export(subject_cooks_distance)
