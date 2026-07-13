@@ -13,7 +13,7 @@
 #' if (requireNamespace("mmrm", quietly = TRUE)) {
 #'   data("fev_data", package = "mmrm")
 #'   fit <- mmrm::mmrm(
-#'     FEV1 ~ RACE + SEX + ARMCD * AVISIT + mmrm::us(AVISIT | USUBJID),
+#'     FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),
 #'     data = fev_data
 #'   )
 #'   dof_mmrm(fit)

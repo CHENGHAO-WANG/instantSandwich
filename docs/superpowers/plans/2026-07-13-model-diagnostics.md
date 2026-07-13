@@ -84,7 +84,7 @@ test_that("mmrm parameter counts include fixed and covariance parameters", {
   testthat::skip_if_not_installed("mmrm")
   data("fev_data", package = "mmrm")
   fit <- mmrm::mmrm(
-    FEV1 ~ RACE + SEX + ARMCD * AVISIT + mmrm::us(AVISIT | USUBJID),
+    FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),
     data = fev_data
   )
   expected <- length(stats::coef(fit, complete = FALSE)) +
@@ -122,7 +122,7 @@ Create `R/model-dof.R`. Use `inherits()` for class dispatch, `isTRUE()` for the 
 #' if (requireNamespace("mmrm", quietly = TRUE)) {
 #'   data("fev_data", package = "mmrm")
 #'   fit <- mmrm::mmrm(
-#'     FEV1 ~ RACE + SEX + ARMCD * AVISIT + mmrm::us(AVISIT | USUBJID),
+#'     FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),
 #'     data = fev_data
 #'   )
 #'   dof_mmrm(fit)
