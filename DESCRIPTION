@@ -1,0 +1,22 @@
+Package: instantSandwich
+Type: Package
+Title: Model-Based and Sandwich Covariance Estimation
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Jane", "Doe",
+      email = "jane@example.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: Computes model-based and cluster-robust sandwich covariance
+    matrices and standard errors for fitted longitudinal models.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+    nlme
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+RoxygenNote: 7.3.3
