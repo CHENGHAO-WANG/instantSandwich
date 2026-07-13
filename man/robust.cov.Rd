@@ -22,29 +22,26 @@ standard errors from a fitted longitudinal model supported by [nlme].
 }
 \examples{
 fit <- nlme::gls(
-  distance ~ age + Sex,
+  distance ~ 0 + Sex + age + Sex:age,
   data = nlme::Orthodont,
   correlation = nlme::corCompSymm(form = ~ 1 | Subject),
-  method = "ML"
+  method = "REML"
 )
 
 covariance <- robust.cov(fit)
 estimate <- stats::coef(fit)
-
-# Illustrative between-within degrees of freedom, as used in the homework.
 group <- nlme::getGroups(fit)
 n_subjects <- length(unique(group))
 n_observations <- length(stats::residuals(fit))
-between_effect <- names(estimate) \%in\% c("(Intercept)", "SexFemale")
-degrees_freedom <- ifelse(
-  between_effect,
-  n_subjects - sum(between_effect),
-  n_observations - n_subjects - sum(!between_effect)
+
+# Between-within degrees of freedom from the BIOS 767 course example.
+degrees_freedom <- c(
+  rep(n_subjects - 2, 2),
+  rep(n_observations - n_subjects - 2, 2)
 )
 
 model_t <- estimate / covariance$se.model
 robust_t <- estimate / covariance$se.robust
-
 coefficient_tests <- data.frame(
   estimate = estimate,
   model_se = covariance$se.model,
@@ -55,4 +52,27 @@ coefficient_tests <- data.frame(
   robust_p = 2 * stats::pt(-abs(robust_t), df = degrees_freedom)
 )
 coefficient_tests
+
+# Test parallel age trends by testing the Sex-by-age interaction.
+contrast <- matrix(c(0, 0, 0, 1), nrow = 1)
+contrast_estimate <- contrast \%*\% estimate
+contrast_covariance <- contrast \%*\% covariance$Sig.model \%*\% t(contrast)
+f_statistic <- as.numeric(
+  contrast_estimate \%*\% solve(contrast_covariance) \%*\%
+    t(contrast_estimate)
+)
+df_numerator <- 1
+df_denominator <- n_observations - n_subjects - 2
+parallelism_test <- data.frame(
+  F = f_statistic,
+  p_value = stats::pf(
+    f_statistic,
+    df1 = df_numerator,
+    df2 = df_denominator,
+    lower.tail = FALSE
+  ),
+  df_numerator = df_numerator,
+  df_denominator = df_denominator
+)
+parallelism_test
 }

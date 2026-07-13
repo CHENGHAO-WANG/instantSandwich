@@ -70,3 +70,7 @@ test_that("robust.cov matches an analytical cluster calculation", {
   expect_equal(result$Sig.robust, expected$Sig.robust, tolerance = 1e-10)
   expect_equal(result$se.robust, expected$se.robust, tolerance = 1e-10)
 })
+
+test_that("the placeholder hello function is not exported", {
+  expect_false("hello" %in% getNamespaceExports("instantSandwich"))
+})
